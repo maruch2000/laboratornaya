@@ -1,0 +1,55 @@
+#!/bin/bash
+
+
+CONTACTS_FILE="contacts.txt"
+
+
+if [ ! -f "$CONTACTS_FILE" ]; then
+    touch "$CONTACTS_FILE"
+fi
+
+
+add_contact() {
+    echo "Введите имя:"
+    read name
+    echo "Введите телефон:"
+    read phone
+    echo "Введите email:"
+    read email
+    echo "$name, $phone, $email" >> "$CONTACTS_FILE"
+    echo "Контакт добавлен!"
+}
+
+
+delete_contact() {
+    echo "Введите имя или телефон для удаления:"
+    read identifier
+    sed -i "/$identifier/d" "$CONTACTS_FILE"
+    echo "Контакт удалён, если он существовал."
+}
+
+
+search_contact() {
+    echo "Введите имя или телефон для поиска:"
+    read identifier
+    echo "Результаты поиска:"
+    grep "$identifier" "$CONTACTS_FILE"
+}
+
+
+while true; do
+    echo "Выберите действие:"
+    echo "1. Добавить контакт"
+    echo "2. Удалить контакт"
+    echo "3. Найти контакт"
+    echo "4. Выйти"
+    read choice
+
+    case $choice in
+        1) add_contact ;;
+        2) delete_contact ;;
+        3) search_contact ;;
+        4) break ;;
+        *) echo "Неверно, попробуйте снова." ;;
+    esac
+done
